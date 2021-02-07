@@ -1,6 +1,7 @@
 import requests
 import secrets
 
+
 def get_data(url: str):
     final_data = []
     entire_data = True

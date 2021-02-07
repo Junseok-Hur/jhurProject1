@@ -62,7 +62,10 @@ import school_api
 # {'2017.earnings.3_yrs_after_completion.overall_count_over_poverty_line': 46, '2017.student.size': 510,
 #  'school.name': 'Ancilla College', '2018.student.size': 369, 'school.state': 'IN', 'id': 150048,
 #  'school.city': 'Donaldson', '2016.repayment.3_yr_repayment.overall': 478}
-url = "https://api.data.gov/ed/collegescorecard/v1/schools.json?school.degrees_awarded.predominant=2,3&fields=id,2016.repayment.3_yr_repayment.overall,2017.earnings.3_yrs_after_completion.overall_count_over_poverty_line,2017.student.size,2018.student.size,school.city,school.state,school.name"
+url = "https://api.data.gov/ed/collegescorecard/v1/schools.json?school.degrees_awarded.predominant=2,3" \
+      "&fields=id,2016.repayment.3_yr_repayment.overall," \
+      "2017.earnings.3_yrs_after_completion.overall_count_over_poverty_line," \
+      "2017.student.size,2018.student.size,school.city,school.state,school.name"
 
 @pytest.fixture()
 def test_get_data():
