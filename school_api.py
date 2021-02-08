@@ -35,8 +35,8 @@ def main():
           "count_over_poverty_line,2017.student.size,2018.student.size,school.city,school.state,school.name"
 
     all_data = get_data(url)
-    for school_data in all_data:
-        print(school_data)
+    #for school_data in all_data:
+    #    print(school_data)
     save_data(all_data)
 
 
