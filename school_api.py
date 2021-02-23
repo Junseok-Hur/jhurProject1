@@ -32,8 +32,8 @@ def close_db(connection: sqlite3.Connection):
 def save_db(cursor, data):
     for school_data in data:
         cursor.execute(
-            """INSERT INTO schools(school_id, school_name, school_state, school_city, student_size_2018, 
-            student_size_2017, three_year_earnings_over_poverty, repayment_overall) VALUES(?,   ?, ?, ?, ?, ?, ?, ?)""",
+            """INSERT INTO schools(school_id, school_name, school_state, school_city, student_size_2018, student_size_2017,
+             three_year_earnings_over_poverty, repayment_overall) VALUES(?, ?, ?, ?, ?, ?, ?, ?)""",
             (school_data['id'], school_data['school.name'], school_data['school.state'], school_data['school.city'],
              school_data['2018.student.size'], school_data['2017.student.size'],
              school_data['2017.earnings.3_yrs_after_completion.overall_count_over_poverty_line'],
