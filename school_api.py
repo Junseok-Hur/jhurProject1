@@ -74,6 +74,7 @@ def save_data(data, filename='SchoolData.txt'):
 
 
 def main():
+    # comment to test workflow
     url = "https://api.data.gov/ed/collegescorecard/v1/schools.json?school.degrees_awarded.predominant=" \
           "2,3&_fields=id,school.name,school.state,school.city,2018.student.size,2017.student.size,2017." \
           "earnings.3_yrs_after_completion.overall_count_over_poverty_line,2016.repayment.3_yr_repayment.overall"
