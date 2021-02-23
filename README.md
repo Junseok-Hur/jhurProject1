@@ -11,14 +11,9 @@
 - API Data is received from the site using API Key and inserted as a text file.
 
 4. a very brief discussion of your database layout and the table(s) you used
+- I really invested a lot of time to solve this problem, but I was very disappointed that the parenthesis and one loop state were the problems to insert data into table.
+- Using the API key value and the phrase "degrees_awarded.predominant=2,3", go to the tree with the desired value, take the value of the specified field, and insert it into the database. To insert data into the database, database is first created and connected. Then create a table and insert the specified value.
 
-5. A brief description of what is missing from the project (if anything)
-- Can not insert the date into table
-{
-  "error": {
-    "code": "OVER_RATE_LIMIT",
-    "message": "You have exceeded your rate limit. Try again later or contact us at https://api.data.gov:443/contact/ for assistance"
-  }
-}
-  
-sqlite3.ProgrammingError: Incorrect number of bindings supplied. The current statement uses 8, and there are 3203 supplied.
+
+5. A  brief description of what is missing from the project (if anything)
+- Professor, thank you for providing the solution to move to sprint3.

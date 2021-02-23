@@ -5,21 +5,21 @@ from typing import Tuple
 
 
 def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
-    db_connection = sqlite3.connect(filename)   # connect to existing DB or create new one
+    db_connection = sqlite3.connect(filename, isolation_level=None)   # connect to existing DB or create new one
     cursor = db_connection.cursor()     # get ready to read/write data
     return db_connection, cursor
 
 
 def setup_db(cursor: sqlite3.Cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS schools(
-    id INTEGER PRIMARY KEY,
-    name TEXT NOT NULL,
-    state TEXT NOT NULL,
-    city TEXT NOT NULL,
-    '2018.student.size' INTEGER DEFAULT NULL,
-    '2017.student.size' INTEGER DEFAULT NULL,
-    '2017.earnings.3_yrs_after_completion.overall_count_over_poverty_line' INTEGER DEFAULT NULL,
-    '2016.repayment.3_yr_repayment.overall' INTEGER DEFAULT NULL
+    school_id INTEGER PRIMARY KEY,
+    school_name TEXT NOT NULL,
+    school_state TEXT NOT NULL,
+    school_city TEXT NOT NULL,
+    student_size_2018 INTEGER,
+    student_size_2017 INTEGER,
+    three_year_earnings_over_poverty INTEGER,
+    repayment_overall INTEGER
     );''')
     print('table created')
 
@@ -29,21 +29,20 @@ def close_db(connection: sqlite3.Connection):
     connection.close()
 
 
-# def add_school(cursor: sqlite3.Cursor, id, name, state, city, STU_2018_N, STU_2017_N, CNTOVER150_3YR, RPY_3YR_N):
-#     cursor.execute(f'''INSERT INTO STUDENTS (id, name, state, city, STU_2018_N, STU_2017_N, CNTOVER150_3YR, RPY_3YR_N)
-#     VALUES({id}, {name}, {state}, {city}, {STU_2018_N}, {STU_2017_N}, {CNTOVER150_3YR}, {RPY_3YR_N})''')
-#
+def save_db(cursor, data):
+    for school_data in data:
+        cursor.execute(
+            """INSERT INTO schools(school_id, school_name, school_state, school_city, student_size_2018, 
+            student_size_2017, three_year_earnings_over_poverty, repayment_overall) VALUES(?,   ?, ?, ?, ?, ?, ?, ?)""",
+            (school_data['id'], school_data['school.name'], school_data['school.state'], school_data['school.city'],
+             school_data['2018.student.size'], school_data['2017.student.size'],
+             school_data['2017.earnings.3_yrs_after_completion.overall_count_over_poverty_line'],
+             school_data['2016.repayment.3_yr_repayment.overall']))
 
 
-def initial_schools(cursor: sqlite3.Cursor, data):
-    cursor.executemany("INSERT INTO schools(id, name, state, city, '2018.student.size', '2017.student.size', "
-                       "'2017.earnings.3_yrs_after_completion.overall_count_over_poverty_line', "
-                       "'2016.repayment.3_yr_repayment.overall') VALUES(?, ?, ?, ?, ?, ?, ?, ?)", data)
-
-
-def check_table(cursor: sqlite3.Cursor):
-    for row in cursor.fetchall():
-        print(row)
+# def check_table(cursor: sqlite3.Cursor):
+#     for row in cursor.fetchall():
+#         print(row)
 
 
 def get_data(url: str):
@@ -76,19 +75,15 @@ def save_data(data, filename='SchoolData.txt'):
 
 def main():
     url = "https://api.data.gov/ed/collegescorecard/v1/schools.json?school.degrees_awarded.predominant=" \
-          "2,3&fields=id,2016.repayment.3_yr_repayment.overall,2017.earnings.3_yrs_after_completion.overall_" \
-          "count_over_poverty_line,2017.student.size,2018.student.size,school.city,school.state,school.name"
+          "2,3&_fields=id,school.name,school.state,school.city,2018.student.size,2017.student.size,2017." \
+          "earnings.3_yrs_after_completion.overall_count_over_poverty_line,2016.repayment.3_yr_repayment.overall"
     conn, cursor = open_db("school_db.sqlite")
     all_data = get_data(url)
     save_data(all_data)
-    dataframe = list()
-    dataframe.append(all_data)
-    # for school_data in all_data:
-    #    print(school_data)
     setup_db(cursor)
-    initial_schools(cursor, dataframe)
-    # check_table(cursor)
+    save_db(cursor, all_data)
     close_db(conn)
+    # print(all_data)
 
 
 if __name__ == '__main__':
