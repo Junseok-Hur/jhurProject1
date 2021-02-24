@@ -2,6 +2,16 @@ import requests
 import secrets
 import sqlite3
 from typing import Tuple
+from openpyxl import Workbook
+import pandas as pd
+
+
+# def open_excel(filename: str):
+#     workbook = load_workbook(filename)
+#     workbook.sheetnames
+#     sheet = workbook.active
+#     sheet.title
+#     return workbook
 
 
 def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
@@ -45,12 +55,15 @@ def save_db(cursor, data):
 #         print(row)
 
 
-def get_data(url: str):
+def get_data():
     final_data = []
     entire_data = True
     page = 0
     while entire_data:
-        final_url = f"{url}&api_key={secrets.api_key}&page={page}"
+        final_url = f"https://api.data.gov/ed/collegescorecard/v1/schools.json?school.degrees_awarded.predominant=" \
+                    f"2,3&_fields=id,school.name,school.state,school.city,2018.student.size,2017.student.size,2017." \
+                    f"earnings.3_yrs_after_completion.overall_count_over_poverty_line,2016.repayment.3_yr_repayment." \
+                    f"overall&api_key={secrets.api_key}&page={page}"
         response = requests.get(final_url)
         if response.status_code != 200:
             print(response.text)
@@ -75,14 +88,19 @@ def save_data(data, filename='SchoolData.txt'):
 
 def main():
     # comment to test workflow
-    url = "https://api.data.gov/ed/collegescorecard/v1/schools.json?school.degrees_awarded.predominant=" \
-          "2,3&_fields=id,school.name,school.state,school.city,2018.student.size,2017.student.size,2017." \
-          "earnings.3_yrs_after_completion.overall_count_over_poverty_line,2016.repayment.3_yr_repayment.overall"
-    conn, cursor = open_db("school_db.sqlite")
-    all_data = get_data(url)
-    save_data(all_data)
-    setup_db(cursor)
-    save_db(cursor, all_data)
+    # url = "https://api.data.gov/ed/collegescorecard/v1/schools.json?school.degrees_awarded.predominant=" \
+    #       "2,3&_fields=id,school.name,school.state,school.city,2018.student.size,2017.student.size,2017." \
+    #       "earnings.3_yrs_after_completion.overall_count_over_poverty_line,2016.repayment.3_yr_repayment.overall"
+    filename = "state_M2019_dl.xlsx"
+    # conn, cursor = open_db("school_db.sqlite")
+    conn, cursor = open_db("state_db.sqlite")
+    # open_excel(filename)
+    # dataframe = pd.read_excel('state_M2019_dl.xlsx')
+    # dataframe.to_sql(name='states', con=conn, if_exists='append')
+    # all_data = get_data(url)
+    # save_data(all_data)
+    # setup_db(cursor)
+    # save_db(cursor, all_data)
     close_db(conn)
     # print(all_data)
 
