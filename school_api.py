@@ -15,7 +15,7 @@ from typing import Tuple
 
 
 def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
-    db_connection = sqlite3.connect(filename, isolation_level=None)   # connect to existing DB or create new one
+    db_connection = sqlite3.connect(filename)   # connect to existing DB or create new one
     cursor = db_connection.cursor()     # get ready to read/write data
     return db_connection, cursor
 
@@ -31,7 +31,7 @@ def setup_db(cursor: sqlite3.Cursor):
     three_year_earnings_over_poverty INTEGER,
     repayment_overall INTEGER
     );''')
-    print('table created')
+    # print('table created')
 
 
 def close_db(connection: sqlite3.Connection):
@@ -42,8 +42,9 @@ def close_db(connection: sqlite3.Connection):
 def save_db(cursor, data):
     for school_data in data:
         cursor.execute(
-            """INSERT INTO schools(school_id, school_name, school_state, school_city, student_size_2018, student_size_2017,
-             three_year_earnings_over_poverty, repayment_overall) VALUES(?, ?, ?, ?, ?, ?, ?, ?)""",
+            """INSERT INTO schools(school_id, school_name, school_state, 
+            school_city, student_size_2018, student_size_2017,
+            three_year_earnings_over_poverty, repayment_overall) VALUES(?, ?, ?, ?, ?, ?, ?, ?)""",
             (school_data['id'], school_data['school.name'], school_data['school.state'], school_data['school.city'],
              school_data['2018.student.size'], school_data['2017.student.size'],
              school_data['2017.earnings.3_yrs_after_completion.overall_count_over_poverty_line'],
