@@ -2,8 +2,8 @@ import requests
 import secrets
 import sqlite3
 from typing import Tuple
-from openpyxl import Workbook
-import pandas as pd
+# from openpyxl import Workbook
+# import pandas as pd
 
 
 # def open_excel(filename: str):
@@ -91,16 +91,16 @@ def main():
     # url = "https://api.data.gov/ed/collegescorecard/v1/schools.json?school.degrees_awarded.predominant=" \
     #       "2,3&_fields=id,school.name,school.state,school.city,2018.student.size,2017.student.size,2017." \
     #       "earnings.3_yrs_after_completion.overall_count_over_poverty_line,2016.repayment.3_yr_repayment.overall"
-    filename = "state_M2019_dl.xlsx"
-    # conn, cursor = open_db("school_db.sqlite")
-    conn, cursor = open_db("state_db.sqlite")
+    # filename = "state_M2019_dl.xlsx"
+    conn, cursor = open_db("school_db.sqlite")
+    # conn, cursor = open_db("state_db.sqlite")
     # open_excel(filename)
     # dataframe = pd.read_excel('state_M2019_dl.xlsx')
     # dataframe.to_sql(name='states', con=conn, if_exists='append')
-    # all_data = get_data(url)
-    # save_data(all_data)
-    # setup_db(cursor)
-    # save_db(cursor, all_data)
+    all_data = get_data()
+    save_data(all_data)
+    setup_db(cursor)
+    save_db(cursor, all_data)
     close_db(conn)
     # print(all_data)
 
