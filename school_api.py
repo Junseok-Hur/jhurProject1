@@ -42,7 +42,7 @@ def close_db(connection: sqlite3.Connection):
 def save_db(cursor, data):
     for school_data in data:
         cursor.execute(
-            """INSERT INTO schools(school_id, school_name, school_state, 
+            """INSERT INTO schools(school_id, school_name, school_state,
             school_city, student_size_2018, student_size_2017,
             three_year_earnings_over_poverty, repayment_overall) VALUES(?, ?, ?, ?, ?, ?, ?, ?)""",
             (school_data['id'], school_data['school.name'], school_data['school.state'], school_data['school.city'],
