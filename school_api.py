@@ -2,14 +2,7 @@ import requests
 import secrets
 import sqlite3
 from typing import Tuple
-from openpyxl import Workbook, load_workbook
 import pandas as pd
-
-
-def open_excel(filename: str):
-    workbook = load_workbook(filename)
-    sheet = workbook.active
-    return workbook
 
 
 def setup_db_excel(cursor: sqlite3.Cursor):
