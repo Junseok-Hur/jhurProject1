@@ -5,22 +5,25 @@ from typing import Tuple
 import pandas as pd
 
 
-def setup_db_excel(cursor: sqlite3.Cursor):
-    cursor.execute('''CREATE TABLE IF NOT EXISTS states(
-    occupation_title TEXT PRIMARY KEY,
-    state TEXT NOT NULL,
-    hourly_pct25_salary FLOAT,
-    annual_pct25_salary INTEGER,
-    occupation_code TEXT);
-    ''')
+# def setup_db_excel(cursor: sqlite3.Cursor):
+#     cursor.execute('''CREATE TABLE IF NOT EXISTS states(
+#     occupation_title TEXT PRIMARY KEY,
+#     state TEXT NOT NULL,
+#     hourly_pct25_salary FLOAT,
+#     annual_pct25_salary INTEGER,
+#     occupation_code TEXT);
+#     ''')
 
 
-def save_excel_db(cursor, data):
-    for state_data in data:
-        cursor.execute(
-            """INSERT INTO states_data(state, occupation_title, hourly_pct25_salary, annual_pct25_salary,
-            occupation_code) VALUES(?, ?, ?, ?, ?)""", state_data['area_title'], state_data['occ_title'],
-            state_data['h_pct25'], state_data['a_pct25'], state_data['occ_code'])
+def save_excel_db(filename: str, conn):
+    # for state_data in data:
+    #     cursor.execute(
+    #         """INSERT INTO states_data(state, occupation_title, hourly_pct25_salary, annual_pct25_salary,
+    #         occupation_code) VALUES(?, ?, ?, ?, ?)""", state_data['area_title'], state_data['occ_title'],
+    #         state_data['h_pct25'], state_data['a_pct25'], state_data['occ_code'])
+    dataframe = pd.read_excel(filename)
+    dataframe_subset = dataframe[['area_title', 'occ_title', 'tot_emp', 'h_pct25', 'a_pct25', 'occ_code']]
+    dataframe_subset.to_sql(name='states', con=conn, if_exists='append', index=False)
 
 
 def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
@@ -101,17 +104,18 @@ def main():
     # url = "https://api.data.gov/ed/collegescorecard/v1/schools.json?school.degrees_awarded.predominant=" \
     #       "2,3&_fields=id,school.name,school.state,school.city,2018.student.size,2017.student.size,2017." \
     #       "earnings.3_yrs_after_completion.overall_count_over_poverty_line,2016.repayment.3_yr_repayment.overall"
-    # excel_file = "state_M2019_dl.xlsx"
-    # conn, cursor = open_db("school_db.sqlite")
-    conn, cursor = open_db("state_db.sqlite")
+    excel_file = "state_M2019_dl.xlsx"
+    conn, cursor = open_db("school_db.sqlite")
+    # conn, cursor = open_db("state_db.sqlite")
     # open_excel(filename)
-    dataframe = pd.read_excel('state_M2019_dl.xlsx')
-    dataframe_subset = dataframe[['area_title', 'occ_title', 'h_pct25', 'a_pct25', 'occ_code']]
-    dataframe_subset.to_sql(name='states', con=conn, if_exists='append')
+    # dataframe = pd.read_excel(excel_file)
+    # dataframe_subset = dataframe[['area_title', 'occ_title', 'h_pct25', 'a_pct25', 'occ_code']]
+    # dataframe_subset.to_sql(name='states', con=conn, if_exists='append')
     # all_data = get_data()
     # save_data(all_data)
     # setup_db(cursor)
     # save_db(cursor, all_data)
+    save_excel_db(excel_file, conn)
     close_db(conn)
     # states = pd.read_excel(excel_file)
     # states_subset = states[['area_title', 'occ_title', 'h_pct25', 'a_pct25', 'occ_code']]
