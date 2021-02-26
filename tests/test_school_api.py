@@ -30,7 +30,7 @@ def test_save_db():
 
 
 def test_read_xlsx_properly():
-    excel_file = "state_M2019_dl.xlsx"
+    excel_file = "./state_M2019_dl.xlsx"
     conn, cursor = sa.open_db("testdb.sqlite")
     df = sa.pd.read_excel(excel_file)
     df.to_sql(name='test_states', con=conn, if_exists='append', index=False)
