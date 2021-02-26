@@ -32,7 +32,7 @@ def setup_db(cursor: sqlite3.Cursor):
 
 
 def close_db(connection: sqlite3.Connection):
-    connection.commit()     # make sure any changes get saved
+    connection.commit()
     connection.close()
 
 
