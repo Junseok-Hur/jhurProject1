@@ -21,9 +21,9 @@ def save_excel_db(filename: str, conn):
     #         """INSERT INTO states_data(state, occupation_title, hourly_pct25_salary, annual_pct25_salary,
     #         occupation_code) VALUES(?, ?, ?, ?, ?)""", state_data['area_title'], state_data['occ_title'],
     #         state_data['h_pct25'], state_data['a_pct25'], state_data['occ_code'])
-    dataframe = pd.read_excel(filename)
-    dataframe_subset = dataframe[['area_title', 'occ_title', 'tot_emp', 'h_pct25', 'a_pct25', 'occ_code']]
-    dataframe_subset.to_sql(name='states', con=conn, if_exists='append', index=False)
+    df = pd.read_excel(filename)
+    df_subset = df[['area_title', 'occ_title', 'tot_emp', 'h_pct25', 'a_pct25', 'occ_code']]
+    df_subset.to_sql(name='states', con=conn, if_exists='append', index=False)
 
 
 def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
@@ -117,8 +117,6 @@ def main():
     # save_db(cursor, all_data)
     save_excel_db(excel_file, conn)
     close_db(conn)
-    # states = pd.read_excel(excel_file)
-    # states_subset = states[['area_title', 'occ_title', 'h_pct25', 'a_pct25', 'occ_code']]
     # print(states_subset)
     # print(all_data)
 

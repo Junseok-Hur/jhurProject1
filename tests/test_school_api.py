@@ -27,3 +27,27 @@ def test_save_db():
     results = cursor.fetchall()
     test_record = results[0]
     assert test_record[0] == 'Test University'
+
+
+def test_read_xlsx_properly():
+    excel_file = "state_M2019_dl.xlsx"
+    conn, cursor = sa.open_db("testdb.sqlite")
+    df = sa.pd.read_excel(excel_file)
+    df.to_sql(name='test_states', con=conn, if_exists='append', index=False)
+    cursor.execute('''SELECT test_states.area_title as "State_Name" FROM test_states WHERE test_states.area_type = "2" 
+    and test_states.area_title is not "District of Columbia" GROUP BY test_states.area_title''')
+    results = cursor.fetchall()
+    test_record = len(results)
+    assert test_record == 50
+
+
+def test_save_excel_db():
+    pass
+
+
+def test_table_exist():
+    pass
+
+
+def test_new_table_work():
+    pass
