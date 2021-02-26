@@ -1,7 +1,6 @@
 import school_api as sa
 
 
-
 def test_get_data():
     data = sa.get_data()
     assert len(data) > 3000
