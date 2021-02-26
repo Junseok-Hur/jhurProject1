@@ -5,22 +5,7 @@ from typing import Tuple
 import pandas as pd
 
 
-# def setup_db_excel(cursor: sqlite3.Cursor):
-#     cursor.execute('''CREATE TABLE IF NOT EXISTS states(
-#     occupation_title TEXT PRIMARY KEY,
-#     state TEXT NOT NULL,
-#     hourly_pct25_salary FLOAT,
-#     annual_pct25_salary INTEGER,
-#     occupation_code TEXT);
-#     ''')
-
-
 def save_excel_db(filename: str, conn):
-    # for state_data in data:
-    #     cursor.execute(
-    #         """INSERT INTO states_data(state, occupation_title, hourly_pct25_salary, annual_pct25_salary,
-    #         occupation_code) VALUES(?, ?, ?, ?, ?)""", state_data['area_title'], state_data['occ_title'],
-    #         state_data['h_pct25'], state_data['a_pct25'], state_data['occ_code'])
     df = pd.read_excel(filename)
     df_subset = df[['area_title', 'occ_title', 'tot_emp', 'h_pct25', 'a_pct25', 'occ_code']]
     df_subset.to_sql(name='states', con=conn, if_exists='append', index=False)
@@ -61,11 +46,6 @@ def save_db(cursor, data):
              school_data['2018.student.size'], school_data['2017.student.size'],
              school_data['2017.earnings.3_yrs_after_completion.overall_count_over_poverty_line'],
              school_data['2016.repayment.3_yr_repayment.overall']))
-
-
-# def check_table(cursor: sqlite3.Cursor):
-#     for row in cursor.fetchall():
-#         print(row)
 
 
 def get_data():
