@@ -6,6 +6,7 @@
 - Confidential API Key (differs by users)
 - sqlite3
 - tuple
+- openpyxl
 
 3. A brief description of what your project does
 - API Data is received from the site using API Key and inserted as a text file.
