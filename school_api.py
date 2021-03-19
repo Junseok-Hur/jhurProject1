@@ -1,17 +1,14 @@
 import requests
-from PyQt5 import QtWidgets
 import secrets
 import sqlite3
 from typing import Tuple
 import pandas as pd
-import sys
-import school_api_gui
 
 
-def display_data():
-    app = QtWidgets.QApplication(sys.argv)  # sys.argv is the list of command line arguments
-    my_window = school_api_gui.Ui_MainWindow()
-    sys.exit(app.exec_())
+# def display_data():
+#     app = QtWidgets.QApplication(sys.argv)  # sys.argv is the list of command line arguments
+#     my_window = school_api_gui.Ui_MainWindow()
+#     sys.exit(app.exec_())
 
 
 def save_excel_db(filename: str, conn):
