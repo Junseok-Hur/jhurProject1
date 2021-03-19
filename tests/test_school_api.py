@@ -1,5 +1,4 @@
 import school_api as sa
-import openpyxl
 import pytest
 
 
@@ -7,15 +6,6 @@ import pytest
 def get_db():
     conn, cursor = sa.open_db("testdb.sqlite")
     return conn, cursor
-
-@pytest.fixture
-def get_test_job_data():
-    test_dict = {'state_name': "TEST",
-                 'state_abbrev': 'ME',
-                 'occupation_title': "Student",
-                 'total_employment_in_field': 10000,
-                 "salary_lower25": 20000.65,
-                 'occupation_code': '11-0000'}
 
 
 def test_get_data():
@@ -57,6 +47,7 @@ def test_read_xlsx_properly(get_db):
     results = cursor.fetchall()
     test_record = len(results)
     assert test_record == 50
+
 
 def test_tables_created_properly(get_db):
     conn, cursor = get_db
