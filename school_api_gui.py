@@ -4,6 +4,7 @@ import school_api
 import sys
 from pathlib import Path
 import plotly.graph_objects as go
+import plotly.express as px
 
 columns = ['area_title', 'occ_title', 'tot_emp', 'h_pct25', 'a_pct25', 'occ_code']
 
@@ -40,7 +41,7 @@ class Ui_MainWindow(QMainWindow):
         self.centralwidget = QtWidgets.QWidget(mainwindow)
         self.centralwidget.setObjectName("centralwidget")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(10, 10, 650, 520))
+        self.tableWidget.setGeometry(QtCore.QRect(10, 10, 700, 500))
         self.tableWidget.setRowCount(5)
         self.tableWidget.setColumnCount(6)
         self.tableWidget.setHorizontalHeaderLabels(columns)
@@ -125,7 +126,7 @@ class Ui_MainWindow(QMainWindow):
         self.dialog.setWindowTitle('Map data')
         self.dialog.setWindowModality(QtCore.Qt.ApplicationModal)
         self.dialog.resize(400, 300)
-        self.dialog.show()
+        self.dialog.show(self.render_map)
 
     def render_map(self):
         fig = go.Figure(go.Scattergeo())

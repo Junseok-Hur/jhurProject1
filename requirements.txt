@@ -2,5 +2,4 @@ requests
 pandas
 openpyxl
 PyQt5
-sys
 pathlib
