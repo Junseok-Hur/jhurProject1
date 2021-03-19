@@ -117,7 +117,7 @@ def main():
     # all_data.sort(key=get_key)
     # save_excel_db(excel_file, conn)
     # conn, cursor = open_db("state_db.sqlite")
-    display_data()
+    # display_data()
     close_db(conn)
 
 

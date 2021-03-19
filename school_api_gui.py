@@ -1,12 +1,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QUrl
-from PyQt5.QtWidgets import QFileDialog, QAction, QMainWindow
-from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QFileDialog, QMainWindow, QApplication, QLabel, QComboBox
 import school_api
 import sys
-import os
 from pathlib import Path
 
+columns = ['area_title', 'occ_title', 'tot_emp', 'h_pct25', 'a_pct25', 'occ_code']
 
 class Ui_MainWindow(QMainWindow):
     def update_data(self, filename):
@@ -35,18 +33,36 @@ class Ui_MainWindow(QMainWindow):
 
     def setup_ui(self, mainwindow):
         mainwindow.setObjectName("MainWindow")
-        mainwindow.resize(1401, 1053)
+        mainwindow.resize(800, 800)
+
         self.centralwidget = QtWidgets.QWidget(mainwindow)
         self.centralwidget.setObjectName("centralwidget")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
         self.tableWidget.setGeometry(QtCore.QRect(10, 10, 650, 521))
         self.tableWidget.setRowCount(5)
         self.tableWidget.setColumnCount(6)
+        self.tableWidget.setHorizontalHeaderLabels(columns)
         self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setStyleSheet("Color: green")
+
         self.btn_update = QtWidgets.QPushButton(self.centralwidget)
         self.btn_update.setGeometry(QtCore.QRect(10, 540, 111, 41))
         self.btn_update.setObjectName("btn_update")
         self.btn_update.clicked.connect(self.update_file)
+
+        self.btn_quit = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_quit.setGeometry(QtCore.QRect(550, 540, 111, 41))
+        self.btn_quit.setObjectName("btn_quit")
+        self.btn_quit.clicked.connect(QApplication.instance().quit)
+
+        self.lbl = QLabel('area_title', self)
+        self.lbl.move(150, 540)
+        cb = QComboBox(self)
+        cb.addItem('Option1')
+        cb.addItem('Option2')
+        cb.addItem('Option3')
+        cb.addItem('Option4')
+        cb.move(50, 50)
 
         mainwindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(mainwindow)
@@ -60,6 +76,7 @@ class Ui_MainWindow(QMainWindow):
         _translate = QtCore.QCoreApplication.translate
         mainwindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.btn_update.setText(_translate("MainWindow", "Update"))
+        self.btn_quit.setText(_translate("MainWindow", "Quit"))
 
 
 if __name__ == "__main__":
@@ -69,3 +86,24 @@ if __name__ == "__main__":
     ui.setup_ui(mainwindow)
     mainwindow.show()
     sys.exit(app.exec_())
+
+
+# self.lbl = QLabel('Option1', self)
+#         self.lbl.move(50, 150)
+#
+#         cb = QComboBox(self)
+#         cb.addItem('Option1')
+#         cb.addItem('Option2')
+#         cb.addItem('Option3')
+#         cb.addItem('Option4')
+#         cb.move(50, 50)
+#
+#         cb.activated[str].connect(self.onActivated)
+#
+#         self.setWindowTitle('QComboBox')
+#         self.setGeometry(300, 300, 300, 200)
+#         self.show()
+#
+#     def onActivated(self, text):
+#         self.lbl.setText(text)
+#         self.lbl.adjustSize()

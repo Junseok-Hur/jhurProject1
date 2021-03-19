@@ -41,14 +41,8 @@ def test_read_xlsx_properly():
     assert test_record == 50
 
 
-def test_save_excel_db(excel_data, cursor):
-    first_item = excel_data[0]
-    question_marks = ', '.join('?' * len(first_item))
-    column_names = ', '.join(list(first_item))
-    insert_statement = f"INSERT INTO job_stats ({column_names}) VALUES ({question_marks});"
-    for record in excel_data:
-        fill_in_blanks = tuple(record.values())
-        cursor.execute(insert_statement, fill_in_blanks)
+def test_save_excel_db():
+    pass
 
 
 def test_table_exist():
