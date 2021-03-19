@@ -6,18 +6,6 @@ from typing import Tuple
 import pandas as pd
 import sys
 import school_api_gui
-import plotly.graph_objects as go
-
-
-def render_map():
-    fig = go.Figure(go.Scattergeo())
-    fig.update_geos(
-        visible=False, resolution=110, scope="usa",
-        showcountries=True, countrycolor="Black",
-        showsubunits=True, subunitcolor="Blue"
-    )
-    fig.update_layout(height=300, margin={"r": 0, "t": 0, "l": 0, "b": 0})
-    fig.show()
 
 
 def display_data():
