@@ -29,7 +29,7 @@ def display_data():
 def save_excel_db(filename: str, conn):
     df = pd.read_excel(filename)
     df_subset = df[['area_title', 'occ_title', 'tot_emp', 'h_pct25', 'a_pct25', 'occ_code']]
-    df_subset.to_sql(name='states', con=conn, if_exists='append', index=False)
+    df_subset.to_sql(name='states', con=conn, if_exists='replace', index=False)
 
 
 def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:

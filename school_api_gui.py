@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QFileDialog, QMainWindow, QApplication, QLabel, QComboBox
+from PyQt5.QtWidgets import QFileDialog, QMainWindow, QApplication, QLabel
 import school_api
 import sys
 from pathlib import Path
@@ -35,6 +35,7 @@ class Ui_MainWindow(QMainWindow):
         mainwindow.setObjectName("MainWindow")
         mainwindow.resize(800, 800)
 
+        # tablewidget to show data
         self.centralwidget = QtWidgets.QWidget(mainwindow)
         self.centralwidget.setObjectName("centralwidget")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
@@ -45,24 +46,42 @@ class Ui_MainWindow(QMainWindow):
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setStyleSheet("Color: green")
 
+        # button to load excel file
         self.btn_update = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_update.setGeometry(QtCore.QRect(10, 540, 111, 41))
+        self.btn_update.setGeometry(QtCore.QRect(10, 540, 110, 41))
         self.btn_update.setObjectName("btn_update")
         self.btn_update.clicked.connect(self.update_file)
 
+        # button to exit program
         self.btn_quit = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_quit.setGeometry(QtCore.QRect(550, 540, 111, 41))
+        self.btn_quit.setGeometry(QtCore.QRect(550, 540, 110, 41))
         self.btn_quit.setObjectName("btn_quit")
         self.btn_quit.clicked.connect(QApplication.instance().quit)
 
-        self.lbl = QLabel('area_title', self)
-        self.lbl.move(150, 540)
-        cb = QComboBox(self)
-        cb.addItem('Option1')
-        cb.addItem('Option2')
-        cb.addItem('Option3')
-        cb.addItem('Option4')
-        cb.move(50, 50)
+        # Label to show sort method
+        self.lb_ascending = QLabel(mainwindow)
+        self.lb_ascending.setGeometry(QtCore.QRect(150, 540, 110, 20))
+        self.lb_ascending.setObjectName("lb_ascending")
+
+        # ascending combobox; let the user choose the column
+        self.cb_ascending = QtWidgets.QComboBox(self.centralwidget)
+        self.cb_ascending.setGeometry(QtCore.QRect(150, 560, 110, 20))
+        self.cb_ascending.setObjectName("cb_ascending")
+        self.cb_ascending.addItems(columns)
+        # self.cb_ascending.activated.connect(self.do_something)
+        self.cb_ascending.activated[str].connect(self.sort_by_ascending)
+
+        # label to show sort method
+        self.lb_descending = QLabel(mainwindow)
+        self.lb_descending.setGeometry(QtCore.QRect(300, 540, 110, 20))
+        self.lb_descending.setObjectName("lb_ascending")
+
+        # descending combobox; let the user choose the column
+        self.cb_descending = QtWidgets.QComboBox(self.centralwidget)
+        self.cb_descending.setGeometry(QtCore.QRect(300, 560, 110, 20))
+        self.cb_descending.setObjectName("cb_ascending")
+        self.cb_descending.addItems(columns)
+        self.cb_descending.activated[str].connect(self.sort_by_descending)
 
         mainwindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(mainwindow)
@@ -72,11 +91,35 @@ class Ui_MainWindow(QMainWindow):
         self.retranslateUi(mainwindow)
         QtCore.QMetaObject.connectSlotsByName(mainwindow)
 
+    def sort_by_ascending(self, text):
+        self.tableWidget.setStyleSheet("Color: red")
+        conn, cursor = school_api.open_db("school_db.sqlite")
+        query = f"SELECT * FROM states ORDER BY {text};"
+        result = conn.execute(query)
+        self.tableWidget.setRowCount(0)
+        for row_number, row_data in enumerate(result):
+            self.tableWidget.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
+
+    def sort_by_descending(self, text):
+        self.tableWidget.setStyleSheet("Color: blue")
+        conn, cursor = school_api.open_db("school_db.sqlite")
+        query = f"SELECT * FROM states ORDER BY {text} DESC;"
+        result = conn.execute(query)
+        self.tableWidget.setRowCount(0)
+        for row_number, row_data in enumerate(result):
+            self.tableWidget.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
+
     def retranslateUi(self, mainwindow):
         _translate = QtCore.QCoreApplication.translate
         mainwindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.btn_update.setText(_translate("MainWindow", "Update"))
         self.btn_quit.setText(_translate("MainWindow", "Quit"))
+        self.lb_ascending.setText(_translate("MainWindow", "Ascending"))
+        self.lb_descending.setText(_translate("MainWindow", "Descending"))
 
 
 if __name__ == "__main__":
@@ -86,24 +129,3 @@ if __name__ == "__main__":
     ui.setup_ui(mainwindow)
     mainwindow.show()
     sys.exit(app.exec_())
-
-
-# self.lbl = QLabel('Option1', self)
-#         self.lbl.move(50, 150)
-#
-#         cb = QComboBox(self)
-#         cb.addItem('Option1')
-#         cb.addItem('Option2')
-#         cb.addItem('Option3')
-#         cb.addItem('Option4')
-#         cb.move(50, 50)
-#
-#         cb.activated[str].connect(self.onActivated)
-#
-#         self.setWindowTitle('QComboBox')
-#         self.setGeometry(300, 300, 300, 200)
-#         self.show()
-#
-#     def onActivated(self, text):
-#         self.lbl.setText(text)
-#         self.lbl.adjustSize()
