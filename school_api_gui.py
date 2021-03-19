@@ -57,7 +57,7 @@ class Ui_MainWindow(QMainWindow):
 
         # button to exit program
         self.btn_quit = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_quit.setGeometry(QtCore.QRect(550, 540, 110, 40))
+        self.btn_quit.setGeometry(QtCore.QRect(600, 540, 110, 40))
         self.btn_quit.setObjectName("btn_quit")
         self.btn_quit.clicked.connect(QApplication.instance().quit)
 
@@ -76,12 +76,12 @@ class Ui_MainWindow(QMainWindow):
 
         # label to show sort method
         self.lb_descending = QLabel(mainwindow)
-        self.lb_descending.setGeometry(QtCore.QRect(280, 540, 110, 20))
+        self.lb_descending.setGeometry(QtCore.QRect(300, 540, 110, 20))
         self.lb_descending.setObjectName("lb_descending")
 
         # descending combobox; let the user choose the column
         self.cb_descending = QtWidgets.QComboBox(self.centralwidget)
-        self.cb_descending.setGeometry(QtCore.QRect(280, 560, 110, 20))
+        self.cb_descending.setGeometry(QtCore.QRect(300, 560, 110, 20))
         self.cb_descending.setObjectName("cb_descending")
         self.cb_descending.addItems(columns)
         self.cb_descending.activated[str].connect(self.sort_by_descending)
@@ -89,7 +89,7 @@ class Ui_MainWindow(QMainWindow):
         # Create new dialog to show visualization map data
         self.dialog = QDialog()
         self.btn_map = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_map.setGeometry(QtCore.QRect(420, 540, 110, 40))
+        self.btn_map.setGeometry(QtCore.QRect(450, 540, 110, 40))
         self.btn_map.setObjectName("btn_map")
         self.btn_map.clicked.connect(self.dialog_open)
 
