@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QFileDialog, QMainWindow, QApplication, QLabel, QDialog
+from PyQt5.QtWidgets import QFileDialog, QMainWindow, QApplication, QLabel
 import school_api
 import sys
 from pathlib import Path
