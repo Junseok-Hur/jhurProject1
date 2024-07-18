@@ -1,5 +1,5 @@
 import requests
-import secrets
+import secret
 import sqlite3
 from typing import Tuple
 import pandas as pd
@@ -36,7 +36,6 @@ def setup_db(cursor: sqlite3.Cursor):
     repayment_overall INTEGER,
     repayment_cohort INTEGER
     );''')
-    # print('table created')
 
 
 def close_db(connection: sqlite3.Connection):
@@ -66,14 +65,13 @@ def get_data():
     entire_data = True
     page = 0
     while entire_data:
-        final_url = f"{url}&api_key={secrets.api_key}&page={page}"
+        final_url = f"{url}&api_key={secret.api_key}&page={page}"
         response = requests.get(final_url)
         if response.status_code != 200:
             print(response.text)
             return []
         json_data = response.json()
         page_data = json_data["results"]
-        # initial_schools(cursor, page_data)
         final_data.extend(page_data)
         if len(page_data) < 20:
             entire_data = False
@@ -90,19 +88,11 @@ def save_data(data, filename='SchoolData.txt'):
 
 
 def main():
-    # url = "https://api.data.gov/ed/collegescorecard/v1/schools.json?school.degrees_awarded.predominant=" \
-    #       "2,3&_fields=id,school.name,school.state,school.city,2018.student.size,2017.student.size,2017." \
-    #       "earnings.3_yrs_after_completion.overall_count_over_poverty_line,2016.repayment.3_yr_repayment.overall"
-    # excel_file = "state_M2019_dl.xlsx"
     conn, cursor = open_db("school_db.sqlite")
     all_data = get_data()
     save_data(all_data)
     setup_db(cursor)
     save_db(cursor, all_data)
-    # all_data.sort(key=get_key)
-    # save_excel_db(excel_file, conn)
-    # conn, cursor = open_db("state_db.sqlite")
-    # display_data()
     close_db(conn)
 
 

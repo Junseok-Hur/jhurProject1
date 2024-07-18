@@ -3,8 +3,6 @@ from PyQt5.QtWidgets import QFileDialog, QMainWindow, QApplication, QLabel, QDia
 import school_api
 import sys
 from pathlib import Path
-import plotly.graph_objects as go
-# import plotly.express as px
 
 columns = ['area_title', 'occ_title', 'tot_emp', 'h_pct25', 'a_pct25', 'occ_code']
 
@@ -13,7 +11,7 @@ class Ui_MainWindow(QMainWindow):
     def update_data(self, filename):
         conn, cursor = school_api.open_db("school_db.sqlite")
         school_api.save_excel_db(filename, conn)
-        # school_api.setup_db(cursor)
+        school_api.setup_db(cursor)
         query = "SELECT * FROM states"
         result = conn.execute(query)
         self.tableWidget.setRowCount(0)
@@ -26,17 +24,13 @@ class Ui_MainWindow(QMainWindow):
         conn.close()
 
     def update_file(self):
-        # fname = (QFileDialog.getOpenFileName(self, "Choose the file", "", "Excel(*.xls *.xlsx)"))
-        # self.update_data(fname)
-
         file, _ = QFileDialog.getOpenFileName(self, "Choose an excel file", "", "Excel(*.xls *.xlsx)")
-        # print(file)
         filename = Path(file).name
         self.update_data(filename)
 
     def setup_ui(self, mainwindow):
         mainwindow.setObjectName("MainWindow")
-        mainwindow.resize(800, 800)
+        mainwindow.resize(750, 650)
 
         # tablewidget to show data
         self.centralwidget = QtWidgets.QWidget(mainwindow)
@@ -86,13 +80,6 @@ class Ui_MainWindow(QMainWindow):
         self.cb_descending.addItems(columns)
         self.cb_descending.activated[str].connect(self.sort_by_descending)
 
-        # Create new dialog to show visualization map data
-        self.dialog = QDialog()
-        self.btn_map = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_map.setGeometry(QtCore.QRect(450, 540, 110, 40))
-        self.btn_map.setObjectName("btn_map")
-        self.btn_map.clicked.connect(self.dialog_open)
-
         mainwindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(mainwindow)
         self.statusbar.setObjectName("statusbar")
@@ -102,7 +89,7 @@ class Ui_MainWindow(QMainWindow):
         QtCore.QMetaObject.connectSlotsByName(mainwindow)
 
     def sort_by_ascending(self, text):
-        self.tableWidget.setStyleSheet("Color: red")
+        self.tableWidget.setStyleSheet("Color: green")
         conn, cursor = school_api.open_db("school_db.sqlite")
         query = f"SELECT * FROM states ORDER BY {text};"
         result = conn.execute(query)
@@ -113,7 +100,7 @@ class Ui_MainWindow(QMainWindow):
                 self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
 
     def sort_by_descending(self, text):
-        self.tableWidget.setStyleSheet("Color: blue")
+        self.tableWidget.setStyleSheet("Color: green")
         conn, cursor = school_api.open_db("school_db.sqlite")
         query = f"SELECT * FROM states ORDER BY {text} DESC;"
         result = conn.execute(query)
@@ -123,28 +110,11 @@ class Ui_MainWindow(QMainWindow):
             for column_number, data in enumerate(row_data):
                 self.tableWidget.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
 
-    def dialog_open(self):
-        self.dialog.setWindowTitle('Map data')
-        self.dialog.setWindowModality(QtCore.Qt.ApplicationModal)
-        self.dialog.resize(400, 300)
-        self.dialog.show(self.render_map)
-
-    def render_map(self):
-        fig = go.Figure(go.Scattergeo())
-        fig.update_geos(
-            visible=False, resolution=110, scope="usa",
-            showcountries=True, countrycolor="Black",
-            showsubunits=True, subunitcolor="Blue"
-        )
-        fig.update_layout(height=300, margin={"r": 0, "t": 0, "l": 0, "b": 0})
-        fig.show()
-
     def retranslateUi(self, mainwindow):
         _translate = QtCore.QCoreApplication.translate
-        mainwindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        mainwindow.setWindowTitle(_translate("MainWindow", "Schools"))
         self.btn_update.setText(_translate("MainWindow", "Update"))
         self.btn_quit.setText(_translate("MainWindow", "Quit"))
-        self.btn_map.setText(_translate("MainWindow", "Map"))
         self.lb_ascending.setText(_translate("MainWindow", "Ascending"))
         self.lb_descending.setText(_translate("MainWindow", "Descending"))
 

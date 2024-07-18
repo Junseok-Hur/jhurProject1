@@ -1,1 +1,4 @@
-/secrets.py
+/secret.py
+/.venv/
+/school_db.sqlite
+/.DS_store/
